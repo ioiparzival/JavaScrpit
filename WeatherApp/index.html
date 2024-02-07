@@ -36,14 +36,30 @@
     </div>
     <script>
       const apiKey = '670d7f1d7883756e79e9dc689b66d293';
-      const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?units=metric&q=german';
+      const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?units=metric&q=';
+      const searchBox = document.querySelector('.search input');
+      const searchBtn = document.querySelector('.search button');
 
-      async function checkWeather() {
-        const response = await fetch(`${apiUrl}&appid=${apiKey}`);
-        var data = await response.json();
+      async function checkWeather(city) {
+        const response = await fetch(`${apiUrl}${city}&appid=${apiKey}`);
+        const data = await response.json();
         console.log(data);
+
+        document.querySelector('.city').innerHTML = data.name;
+        document.querySelector('.temp').innerHTML = Math.round(data.main.temp) + '°c';
+        document.querySelector('.humidity').innerHTML = data.main.humidity + '%';
+        document.querySelector('.wind').innerHTML = data.wind.speed + ' km/h';
       }
-      checkWeather();
+
+      searchBtn.addEventListener('click', () => {
+        checkWeather(searchBox.value);
+      });
+
+      searchBox.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          checkWeather(searchBox.value);
+        }
+      });
     </script>
   </body>
 </html>
